@@ -44,9 +44,9 @@ LedgerFlow.Worker          → Background queue consumer
 | Database | PostgreSQL |
 | ORM | Entity Framework Core |
 | Messaging | RabbitMQ |
-| Auth | JWT (custom, no ASP.NET Identity) |
+| Auth | JWT (custom) |
 | Real-time | SignalR |
-| Containerization | Docker Compose |
+| Containerization | Docker Compose (optional) |
 | Currency | NGN (single currency) |
 
 ## Transaction States
@@ -69,24 +69,36 @@ RECEIVED → PROCESSING → RISK_CHECK → APPROVED / FLAGGED / DECLINED → SET
 
 ### Prerequisites
 - [.NET 8 SDK](https://dotnet.microsoft.com/download)
-- [Docker Desktop](https://www.docker.com/products/docker-desktop)
+- PostgreSQL and RabbitMQ — run locally **or** via Docker
 
-### Run Locally
+---
 
+### Option A — Run Without Docker
+
+1. Install [PostgreSQL](https://www.postgresql.org/download/) and [RabbitMQ](https://www.rabbitmq.com/download.html) locally
+2. Create a PostgreSQL database (any name you prefer)
+3. Update the connection strings in `src/LedgerFlow.Api/appsettings.Development.json` and `src/LedgerFlow.Worker/appsettings.Development.json` with your database name, PostgreSQL credentials, and RabbitMQ credentials.
+4. Apply database migrations:
 ```bash
-# Clone the repo
-git clone https://github.com/yourusername/LedgerFlow.git
-cd LedgerFlow
-
-# Start infrastructure (PostgreSQL + RabbitMQ)
-docker-compose up -d
-
-# Run the API
+dotnet ef database update --project src/LedgerFlow.Infrastructure --startup-project src/LedgerFlow.Api
+```
+5. Run the API and Worker in separate terminals:
+```bash
 dotnet run --project src/LedgerFlow.Api
-
-# Run the Worker (separate terminal)
 dotnet run --project src/LedgerFlow.Worker
 ```
+
+---
+
+### Option B — Run With Docker
+
+1. Install [Docker Desktop](https://www.docker.com/products/docker-desktop)
+2. Start everything (PostgreSQL, RabbitMQ, API, Worker):
+```bash
+docker-compose up -d
+```
+
+---
 
 ### Run Tests
 
@@ -96,17 +108,14 @@ dotnet test
 
 ## API Endpoints
 
-| Method | Endpoint | Description | Auth |
-|--------|----------|-------------|------|
-| POST | `/api/v1/auth/register` | Register account | Public |
-| POST | `/api/v1/auth/login` | Login, get JWT | Public |
-| POST | `/api/v1/transactions` | Submit transaction | Customer |
-| GET | `/api/v1/transactions` | List transactions (paginated) | Customer / Operator |
-| GET | `/api/v1/transactions/{reference}` | Get transaction status | Customer |
-| GET | `/api/v1/accounts/{id}/transactions` | Account transaction history | Customer |
-| GET | `/health` | Health check | Public |
-
 Full API docs available at `/swagger` when running locally.
+
+## Roles
+
+| Role | Access |
+|------|--------|
+| `customer` | Submit and view own transactions |
+| `admin` | Everything + reverse transactions, manage accounts |
 
 ## Project Status
 
