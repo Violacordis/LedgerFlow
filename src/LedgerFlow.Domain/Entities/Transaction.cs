@@ -5,14 +5,15 @@ namespace LedgerFlow.Domain.Entities;
 
 public class Transaction
 {
-    private static readonly Dictionary<TransactionStatus, List<TransactionStatus>> AllowedTransitions = new()
-    {
-        { TransactionStatus.Pending,    [TransactionStatus.Processing] },
-        { TransactionStatus.Processing, [TransactionStatus.RiskCheck] },
-        { TransactionStatus.RiskCheck,  [TransactionStatus.Approved, TransactionStatus.Flagged, TransactionStatus.Declined] },
-        { TransactionStatus.Approved,   [TransactionStatus.Settled] },
-        { TransactionStatus.Flagged,    [TransactionStatus.Settled] }
-    };
+    private static readonly IReadOnlyDictionary<TransactionStatus, IReadOnlyList<TransactionStatus>> AllowedTransitions =
+        new Dictionary<TransactionStatus, IReadOnlyList<TransactionStatus>>
+        {
+            { TransactionStatus.Pending,    [TransactionStatus.Processing] },
+            { TransactionStatus.Processing, [TransactionStatus.RiskCheck] },
+            { TransactionStatus.RiskCheck,  [TransactionStatus.Approved, TransactionStatus.Flagged, TransactionStatus.Declined] },
+            { TransactionStatus.Approved,   [TransactionStatus.Settled] },
+            { TransactionStatus.Flagged,    [TransactionStatus.Settled] }
+        };
 
     public Guid Id { get; private set; }
     public string Reference { get; private set; } = string.Empty;
