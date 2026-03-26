@@ -2,7 +2,7 @@ namespace LedgerFlow.Domain.Enums;
 
 public enum TransactionStatus
 {
-    Received,
+    Pending,
     Processing,
     RiskCheck,
     Approved,
