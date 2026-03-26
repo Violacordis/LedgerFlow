@@ -27,10 +27,17 @@ public class Account
         };
     }
 
+    private void GuardAccountActive()
+    {
+        if (Status == AccountStatus.Suspended)
+            throw new AccountSuspendedException(AccountNumber);
+        if (Status == AccountStatus.Closed)
+            throw new AccountClosedException(AccountNumber);
+    }
+
     public void Debit(decimal amount)
     {
-        if (Status != AccountStatus.Active)
-            throw new AccountSuspendedException(AccountNumber, Status.ToString());
+        GuardAccountActive();
 
         if (amount <= 0)
             throw new ArgumentException("Debit amount must be greater than zero.");
@@ -43,8 +50,7 @@ public class Account
 
     public void Credit(decimal amount)
     {
-        if (Status != AccountStatus.Active)
-            throw new AccountSuspendedException(AccountNumber, Status.ToString());
+        GuardAccountActive();
 
         if (amount <= 0)
             throw new ArgumentException("Credit amount must be greater than zero.");
