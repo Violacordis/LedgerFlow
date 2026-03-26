@@ -16,11 +16,17 @@ public class Account
 
     public static Account Create(string accountNumber, string name)
     {
+        if (string.IsNullOrWhiteSpace(accountNumber))
+            throw new ArgumentException("Account number is required.", nameof(accountNumber));
+
+        if (string.IsNullOrWhiteSpace(name))
+            throw new ArgumentException("Account name is required.", nameof(name));
+
         return new Account
         {
             Id = Guid.NewGuid(),
-            AccountNumber = accountNumber,
-            Name = name,
+            AccountNumber = accountNumber.Trim(),
+            Name = name.Trim(),
             Balance = 0,
             Status = AccountStatus.Active,
             CreatedAt = DateTime.UtcNow
