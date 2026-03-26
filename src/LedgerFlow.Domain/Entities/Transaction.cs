@@ -32,6 +32,15 @@ public class Transaction
 
     public static Transaction Create(Guid senderAccountId, Guid receiverAccountId, decimal amount, string idempotencyKey)
     {
+        if (amount <= 0)
+            throw new ArgumentOutOfRangeException(nameof(amount), amount, "Transaction amount must be greater than zero.");
+
+        if (senderAccountId == receiverAccountId)
+            throw new ArgumentException("Sender and receiver accounts must be different.", nameof(receiverAccountId));
+
+        if (string.IsNullOrWhiteSpace(idempotencyKey))
+            throw new ArgumentException("Idempotency key is required.", nameof(idempotencyKey));
+
         return new Transaction
         {
             Id = Guid.NewGuid(),
