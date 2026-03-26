@@ -52,7 +52,7 @@ LedgerFlow.Worker          → Background queue consumer
 ## Transaction States
 
 ```
-RECEIVED → PROCESSING → RISK_CHECK → APPROVED / FLAGGED / DECLINED → SETTLED
+Pending → Processing → RiskCheck → Approved / Flagged / Declined → Settled
 ```
 
 ## Risk Engine Rules
