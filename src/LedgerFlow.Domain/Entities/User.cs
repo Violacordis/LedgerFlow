@@ -18,6 +18,12 @@ public class User
 
     public static User Create(string email, string passwordHash, Guid accountId, UserRole role = UserRole.Customer)
     {
+        if (string.IsNullOrWhiteSpace(email))
+            throw new ArgumentException("Email is required.", nameof(email));
+
+        if (string.IsNullOrWhiteSpace(passwordHash))
+            throw new ArgumentException("Password hash is required.", nameof(passwordHash));
+
         return new User
         {
             Id = Guid.NewGuid(),
