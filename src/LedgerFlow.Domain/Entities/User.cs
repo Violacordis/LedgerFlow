@@ -21,7 +21,7 @@ public class User
         return new User
         {
             Id = Guid.NewGuid(),
-            Email = email.ToLower().Trim(),
+            Email = email.Trim().ToLowerInvariant(),
             PasswordHash = passwordHash,
             AccountId = accountId,
             Role = role,
