@@ -17,7 +17,7 @@ public class LedgerEntry
     public static LedgerEntry CreateDebit(Guid transactionId, Guid accountId, decimal amount)
     {
         if (amount <= 0)
-            throw new ArgumentException("Debit amount must be greater than zero.");
+            throw new ArgumentOutOfRangeException(nameof(amount), amount, "Debit amount must be greater than zero.");
 
         return new LedgerEntry
         {
@@ -33,7 +33,7 @@ public class LedgerEntry
     public static LedgerEntry CreateCredit(Guid transactionId, Guid accountId, decimal amount)
     {
         if (amount <= 0)
-            throw new ArgumentException("Credit amount must be greater than zero.");
+            throw new ArgumentOutOfRangeException(nameof(amount), amount, "Credit amount must be greater than zero.");
 
         return new LedgerEntry
         {

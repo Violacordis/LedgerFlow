@@ -40,7 +40,7 @@ public class Account
         GuardAccountActive();
 
         if (amount <= 0)
-            throw new ArgumentException("Debit amount must be greater than zero.");
+            throw new ArgumentOutOfRangeException(nameof(amount), amount, "Debit amount must be greater than zero.");
 
         if (Balance < amount)
             throw new InsufficientFundsException(AccountNumber, Balance, amount);
@@ -53,7 +53,7 @@ public class Account
         GuardAccountActive();
 
         if (amount <= 0)
-            throw new ArgumentException("Credit amount must be greater than zero.");
+            throw new ArgumentOutOfRangeException(nameof(amount), amount, "Credit amount must be greater than zero.");
 
         Balance += amount;
     }
