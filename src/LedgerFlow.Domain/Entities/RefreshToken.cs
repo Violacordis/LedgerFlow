@@ -18,6 +18,12 @@ public class RefreshToken
 
     public static RefreshToken Create(Guid userId, string token, int expiryDays = 7)
     {
+        if (string.IsNullOrWhiteSpace(token))
+            throw new ArgumentException("Token is required.", nameof(token));
+
+        if (expiryDays <= 0)
+            throw new ArgumentOutOfRangeException(nameof(expiryDays), expiryDays, "Expiry days must be greater than zero.");
+
         return new RefreshToken
         {
             Id = Guid.NewGuid(),
