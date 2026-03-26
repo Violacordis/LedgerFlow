@@ -16,6 +16,9 @@ public class LedgerEntry
 
     public static LedgerEntry CreateDebit(Guid transactionId, Guid accountId, decimal amount)
     {
+        if (amount <= 0)
+            throw new ArgumentException("Debit amount must be greater than zero.");
+
         return new LedgerEntry
         {
             Id = Guid.NewGuid(),
@@ -29,6 +32,9 @@ public class LedgerEntry
 
     public static LedgerEntry CreateCredit(Guid transactionId, Guid accountId, decimal amount)
     {
+        if (amount <= 0)
+            throw new ArgumentException("Credit amount must be greater than zero.");
+
         return new LedgerEntry
         {
             Id = Guid.NewGuid(),
