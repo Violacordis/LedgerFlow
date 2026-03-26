@@ -74,6 +74,6 @@ public class Transaction
 
     private static string GenerateReference()
     {
-        return $"TXN-{Guid.NewGuid().ToString("N")[..12].ToUpper()}";
+        return $"TXN-{Guid.NewGuid().ToString("N")[..12].ToUpperInvariant()}";
     }
 }
